@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TOC from "./components/TOC"
 import Subject from "./components/Subject"
 import Content from "./components/Content"
+import Control from "./components/Control"
 import './App.css';
 
 class App extends Component {
@@ -53,6 +54,11 @@ class App extends Component {
             selected_content_id: Number(id)
           });
         }.bind(this)} data={this.state.contents}></TOC>
+        <Control onChangeMode={function (mode) {
+          this.setState({
+            mode: mode
+          });
+        }.bind(this)}></Control>
         <Content title={_title} desc={_desc}></Content>
       </div>
     );
