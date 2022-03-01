@@ -70,7 +70,6 @@ class App extends Component {
       _article = <CreateContent onSubmit={function (title, desc) {
         // add content
         this.max_content_id = this.max_content_id + 1;
-
         // push -> 원본 배열을 바꿈
         // concat -> 바꾼 배열값을 리턴해 새로운 변수에 담아서 씀
         var _contents = this.state.contents.concat(
