@@ -3,33 +3,9 @@ import TOC from "./components/TOC"
 import Subject from "./components/Subject"
 import ReadContent from "./components/ReadContent"
 import CreateContent from "./components/CreateContent"
+import UpdateContent from "./components/UpdateContent"
 import Control from "./components/Control"
 import './App.css';
-
-// const content = {
-//   welcome: {
-//     title: "Welcome",
-//     desc: "Welcome React!"
-//   },
-//   subject: {
-//     title: "WEB",
-//     sub: "world wide web"
-//   }
-// }
-
-// const mode = {
-//   welcome: "welcome",
-//   read: "read",
-//   create: "create",
-//   read: "read",
-//   update: "update"
-// }
-
-// function App() {
-//   return
-//   <Subject></Subject>,
-//     <TOC></TOC>
-// }
 
 class App extends Component {
   constructor(props) {
@@ -47,8 +23,18 @@ class App extends Component {
       ]
     }
   }
-
-  render() {
+  getReadContent() {
+    var i = 0;
+    while (i < this.state.contents.length) {
+      var data = this.state.contents[i];
+      if (data.id === this.state.selected_content_id) {
+        return data;
+        break;
+      }
+      i = i + 1;
+    }
+  }
+  getContent() {
     var _title, _desc, _article = null;
     if (this.state.mode === 'welcome') {
       _title = this.state.welcome.title;
@@ -57,13 +43,8 @@ class App extends Component {
     } else if (this.state.mode === 'read') {
       var i = 0;
       while (i < this.state.contents.length) {
-        var data = this.state.contents[i];
-        if (data.id === this.state.selected_content_id) {
-          _title = data.title;
-          _desc = data.desc;
-          break;
-        }
-        i = i + 1;
+        var _content = this.getReadContent();
+        _article = <ReadContent title={_content.title} desc={_desc}></ReadContent>
       }
       _article = <ReadContent title={_title} desc={_desc}></ReadContent>
     } else if (this.state.mode === 'create') {
@@ -75,12 +56,40 @@ class App extends Component {
         var _contents = this.state.contents.concat(
           { id: this.max_content_id, title: title, desc: desc }
         )
+
+        // 배열복제
+        // var _contents = Array.from(this.state.contents);
+        // _contents.push . . .
+        // 변수 복제 --> var b = Object.assign({}, a);
+
         this.setState({
-          contents: _contents
+          contents: _contents,
+          mode: 'read',
+          selected_content_id: this.max_content_id
         })
       }.bind(this)}></CreateContent>
+    } else if (this.state.mode === 'update') {
+      _content = this.getReadContent();
+      _article = <UpdateContent data={_content} onSubmit={
+        function (_id, _title, _desc) {
+          var _contents = Array.from(this.state.contents);
+          var i = 0;
+          while (i < _contents.length) {
+            if (_contents[i].id === _id) {
+              _contents[i] = { id: _id, title: _title, desc: _desc };
+              break;
+            }
+            i++;
+          }
+          this.setState({
+            contents: _contents
+          })
+        }.bind(this)}></UpdateContent>
     }
+    return _article;
+  }
 
+  render() {
     return (
       <div className="App">
         <Subject
@@ -101,7 +110,7 @@ class App extends Component {
             mode: mode
           });
         }.bind(this)}></Control>
-        {_article}
+        {this.getContent()}
       </div>
     );
   }
