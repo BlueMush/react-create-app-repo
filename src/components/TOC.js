@@ -3,12 +3,9 @@ import React, { Component } from 'react';
 class TOC extends Component {
   // 변경이 되었을 때만 새로 랜더링 할 수 있게 함
   shouldComponentUpdate(newProps, newState) {
-    console.log('TOC render shouldComponentUpdate');
-    console.log(newProps.data);
-    console.log(this.props.data);
     if (newProps.data === this.props.data) {
       return false;
-    } else if (newProps.data != this.props.data) {
+    } else if (newProps.data !== this.props.data) {
       return true;
     }
 

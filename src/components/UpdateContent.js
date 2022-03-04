@@ -16,8 +16,6 @@ class UpdateContent extends Component {
 	}
 
 	render() {
-		console.log(this.props.data);
-		console.log("update content");
 		return (
 			<article>
 				<h2>
